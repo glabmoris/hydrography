@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hydrography"
+version = "0.1.0"
+authors = [
+  { name="Guillaume Morissette", email="glabmoris@gmail.com" },
+]
+description = "A library to process multibeam echosounder files"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    #"requests>=2.28.0", # Add third-party dependencies here
+]
