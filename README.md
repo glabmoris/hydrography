@@ -8,7 +8,7 @@ Library to process sonar data files into hydrographic data products
 This module provides decoding and georeferencing of many binary file types recorded by sonars from a large variety manufacturers. It provides a unified hardware abstraction interface to handle various hydrographic data processing tasks. 
 
 ### Examples
-Support for KMALL,ALL,S7K and XTF binary file formats is provided through the MbesReader class.
+Support for KMALL,ALL,S7K and XTF binary file formats is provided through the MbesReader class. File type is automatically inferred from the file extension and processed with the appropriate parser.
 
 ```python
 r = MbesReader()
