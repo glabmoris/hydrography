@@ -1,6 +1,6 @@
-# MBES library
+# Hydrography library
 
-Library to process multibeam echosounder files
+Library to process echosounder data files into hydrographic data
 
 ## Build
 To build the package, run the `python -m build` command from the top level directory
