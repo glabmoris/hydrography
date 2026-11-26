@@ -1,11 +1,11 @@
 # Hydrography library
 
-Library to process echosounder data files into hydrographic data
+Library to process sonar data files into hydrographic data products
 
 # Usage
 
-## Multibeam sonars
-This module provides decoding and georeferencing of many binary file types recorded by sonars from a large variety manufacturers. It provides a unified hardware abstraction interface to handle hydrographic data processing tasks. 
+## Multibeam echosounders
+This module provides decoding and georeferencing of many binary file types recorded by sonars from a large variety manufacturers. It provides a unified hardware abstraction interface to handle various hydrographic data processing tasks. 
 
 ### Examples
 Support for KMALL,ALL,S7K and XTF binary file formats is provided through the MbesReader class.
