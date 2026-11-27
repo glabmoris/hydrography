@@ -1,5 +1,5 @@
 import unittest
-from mbes.core import MbesReader
+from hydrography.core import MbesReader
 
 class TestMbesReader(unittest.TestCase):
 

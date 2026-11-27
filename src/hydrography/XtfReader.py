@@ -6,15 +6,15 @@ import datetime
 import statistics
 import numpy as np
 
-from mbes.BaseReader import BaseReader
-from mbes.Ping import Ping
-from mbes.Attitude import Attitude
-from mbes.Position import Position
+from hydrography.BaseReader import BaseReader
+from hydrography.Ping import Ping
+from hydrography.Attitude import Attitude
+from hydrography.Position import Position
 
 # References are to the Triton Imaging "eXtended Triton Format (XTF) Rev. 41" (September 2016). XTF values are little
 # endian (2.5) with 1 byte packing (2.2.1). Reson 7125 bathymetry is stored as a raw 7027 record (appendix 1), whose
 # layout is from the Teledyne RESON "7k Data Format, Volume I" version 2.41, which appendix 1 refers to.
-#
+
 # Two misprints in the XTF document: Table E gives HeaderType at offset 1 and SubChannelNumber at 2, and Table H gives
 # ReservedSpace2 at 245. Every packet starts with the same 14 bytes (magic 0, type 2, subchannel 3, size 10), and the
 # stated 64 and 256 byte totals only work out with ReservedSpace2 at 250, so those are used here.
@@ -121,13 +121,13 @@ class XtfReader(BaseReader):
 		self.file_header = {}                   #parsed XTFFILEHEADER, e.g. file_header["NavUnits"]
 		self.channels = []                      #parsed CHANINFO structures
 
-	def lever_arm(self):
+	def get_offset(self):
 		"""Bathymetry sonar position re. vessel reference point (VCS: x fwd, y stbd, z down), from the first bathymetry
 		CHANINFO. XTF offsets have X to starboard, Y forward and Z down (Table D), so (x, y, z) = (Y, X, Z)."""
 		for channel in self.channels:
 			if channel["TypeOfChannel"] == TYPE_BATHYMETRY:
-				return np.array([channel["OffsetY"], channel["OffsetX"], channel["OffsetZ"]])
-		return np.zeros(3)
+				self.offset = np.array([channel["OffsetY"], channel["OffsetX"], channel["OffsetZ"]])
+		return self.offset
 
 	def position_lever_arm(self):
 		"""Navigation system position re. vessel reference point (VCS), from the file header NavOffset. Raw navigation

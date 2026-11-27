@@ -6,10 +6,10 @@ import datetime
 from types import SimpleNamespace
 import numpy as np
 
-from mbes.BaseReader import BaseReader
-from mbes.Ping import Ping
-from mbes.Attitude import Attitude
-from mbes.Position import Position
+from hydrography.BaseReader import BaseReader
+from hydrography.Ping import Ping
+from hydrography.Attitude import Attitude
+from hydrography.Position import Position
 
 # References are to the Kongsberg "EM datagram formats" instruction manual, 850-160692/W (January 2018).
 # Every datagram is: number of bytes (4U, not counting itself), STX, type, EM model, date, time, counter,

@@ -3,13 +3,14 @@ import sys
 import pandas as pd
 import numpy as np
 
-from mbes.KmallReader import KmallReader
-from mbes.S7kReader import S7kReader
-from mbes.AllReader import AllReader
-from mbes.XtfReader import XtfReader
+from hydrography.KmallReader import KmallReader
+from hydrography.S7kReader import S7kReader
+from hydrography.AllReader import AllReader
+from hydrography.XtfReader import XtfReader
+from hydrography.HsxReader import HsxReader
 
-from mbes.Interpolator import Interpolator, InterpolationError
-from mbes.Georeferencing import Georeferencing
+from hydrography.Interpolator import Interpolator, InterpolationError
+from hydrography.Georeferencing import Georeferencing
 
 class MbesReader:
 
@@ -18,14 +19,18 @@ class MbesReader:
 
 		reader = False;
 
-		if filename_components[1] =='.kmall':
+		ext = filename_components[1].lower()
+
+		if ext =='.kmall':
 			reader = KmallReader()
-		elif filename_components[1] =='.s7k':
+		elif ext =='.s7k':
 			reader = S7kReader()
-		elif filename_components[1] =='.all':
+		elif ext =='.all':
 			reader = AllReader()
-		elif filename_components[1] =='.xtf':
+		elif ext =='.xtf':
 			reader = XtfReader()
+		elif ext =='.hsx':
+			reader = HsxReader(crs="EPSG:4326")
 		else:
 			raise ValueError(f"Unknown file extension {filename_components[1]}\n")
 
@@ -43,9 +48,12 @@ class MbesReader:
 			return []
 
 		# Sonar offset re. reference point: use the installation parameters unless given explicitly
-		if offset is None:
-			offset = reader.lever_arm() if hasattr(reader, "lever_arm") else np.zeros(3)
-		sys.stderr.write(f"Offset (x fwd, y stbd, z down): {offset}\n")
+		offset = reader.get_offset()
+
+		if reader.get_offset() is None:
+			offset = np.zeros(3)
+
+		sys.stderr.write(f"Offset (x forward, y starboard, z down): {offset}\n")
 
 		reader.positions.sort(key=lambda x: x.timestamp)
 		reader.attitudes.sort(key=lambda x: x.timestamp)
@@ -56,7 +64,6 @@ class MbesReader:
 		position_index = 0
 		n_att = len(reader.attitudes)
 		n_pos = len(reader.positions)
-
 
 		georeferenced_pings = []
 
@@ -110,4 +117,3 @@ if __name__ == "__main__":
 
 	for p in pings:
 		print(f"{p[0]} {p[1]} {p[2]}")
-

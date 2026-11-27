@@ -1,7 +1,7 @@
 import math
 
-from mbes.Position import Position
-from mbes.Attitude import Attitude
+from hydrography.Position import Position
+from hydrography.Attitude import Attitude
 
 class InterpolationError(Exception):
 	pass

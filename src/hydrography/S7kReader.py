@@ -5,10 +5,10 @@ import math
 import datetime
 import numpy as np
 
-from mbes.BaseReader import BaseReader
-from mbes.Ping import Ping
-from mbes.Attitude import Attitude
-from mbes.Position import Position
+from hydrography.BaseReader import BaseReader
+from hydrography.Ping import Ping
+from hydrography.Attitude import Attitude
+from hydrography.Position import Position
 
 # References are to the Teledyne RESON "7k Data Format, Volume I", DFD 12713 version 2.41.
 # All data is little endian with single byte alignment (2.6). Distances in metres, angles in radians (2.2).
@@ -105,7 +105,7 @@ class S7kReader(BaseReader):
 		self.pings     = []
 		self.installation = {}                  #parsed 1020 and 7030, e.g. installation["7030"]["receiveArrayX_m"]
 
-	def lever_arm(self):
+	def get_offset(self):
 		"""Sonar reference point re. vessel reference point, in the VCS used by KmallReader (x fwd, y stbd, z down).
 		The 7k frame is X starboard, Y forward, Z up (2.2), so (x, y, z) = (Y, X, -Z).
 		From 7030 (written by third party software such as Teledyne PDS): along-track from the TX array, across-track
@@ -115,8 +115,9 @@ class S7kReader(BaseReader):
 			return np.array([parameters["transmitArrayY_m"], parameters["receiveArrayX_m"], -parameters["receiveArrayZ_m"]])
 		identifiers = self.installation.get("1020")
 		if identifiers:
-			return np.array([identifiers["vrpToSrpY_m"], identifiers["vrpToSrpX_m"], -identifiers["vrpToSrpZ_m"]])
-		return np.zeros(3)
+			self.offset = np.array([identifiers["vrpToSrpY_m"], identifiers["vrpToSrpX_m"], -identifiers["vrpToSrpZ_m"]])
+
+		return self.offset
 
 	def read(self,filename):
 		self.positions = []

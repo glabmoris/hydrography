@@ -2,7 +2,7 @@ import os
 import sys
 import pandas as pd
 
-from mbes.MbesReader import MbesReader
+from hydrography.MbesReader import MbesReader
 
 if __name__ == "__main__":
 	if len(sys.argv) != 2:

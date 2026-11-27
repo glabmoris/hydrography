@@ -1,9 +1,9 @@
 import math
 import numpy as np
-from mbes.Position import Position
-from mbes.Attitude import Attitude
-from mbes.Ping     import Ping
-from mbes.SoundVelocityProfile import SoundVelocityProfile
+from hydrography.Position import Position
+from hydrography.Attitude import Attitude
+from hydrography.Ping     import Ping
+from hydrography.SoundVelocityProfile import SoundVelocityProfile
 
 class Georeferencing:
 

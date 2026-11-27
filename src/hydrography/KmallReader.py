@@ -4,10 +4,10 @@ import sys
 import math
 import numpy as np
 
-from mbes.BaseReader import BaseReader
-from mbes.Ping import Ping
-from mbes.Attitude import Attitude
-from mbes.Position import Position
+from hydrography.BaseReader import BaseReader
+from hydrography.Ping import Ping
+from hydrography.Attitude import Attitude
+from hydrography.Position import Position
 
 # "Unavailable" markers from EMdgmFormat.h
 UNAVAILABLE_LATITUDE  = 200.0
@@ -30,14 +30,14 @@ class KmallReader(BaseReader):
 		self.pings     = []
 		self.installation = {}                  #parsed #IIP, e.g. installation["TRAI_RX1"]["X"]
 
-	def lever_arm(self):
+	def get_offset(self):
 		"""Sonar position re. vessel reference point (VCS: x fwd, y stbd, z down), from #IIP.
 		Along-track from the TX array, across-track and vertical from the RX array (Mills cross)."""
 		tx = self.installation.get("TRAI_TX1")
 		rx = self.installation.get("TRAI_RX1")
-		if not tx or not rx:
-			return np.zeros(3)
-		return np.array([float(tx["X"]), float(rx["Y"]), float(rx["Z"])])
+		if tx and rx:
+			self.offset = np.array([float(tx["X"]), float(rx["Y"]), float(rx["Z"])])
+		return self.offset
 
 	def read(self,filename):
 		self.positions = []
